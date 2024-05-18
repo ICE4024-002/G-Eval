@@ -4,7 +4,7 @@ from openai import OpenAI
 #key.txt 파일을 읽어서 api_key를 가져옴
 with open('key.txt', 'r') as f:
     api_key = f.readline().strip()
-client = OpenAI(
+client = OpenAI(        
     api_key=api_key
 )
 
@@ -15,33 +15,37 @@ chat_completion = client.chat.completions.create(
     
     messages=[
                 {
-            "role": "system",
-            "content": "You will be presented with one legal question and the system's answer to it. Your task is to evaluate the answers according to certain metrics. Your task is to rate the summary on two metrics: legal accuracy and relevance. Please make sure you read and understand these instructions carefully. Please keep this document open while reviewing, and refer to it as needed.\n\n"
+                "role": "system",
+                "content": "You will be presented with one legal question and the system's answer to it. Your task is to evaluate the answers according to certain metrics. Your task is to rate the summary on three metrics: legal accuracy, relevance, and practicality. Please make sure you read and understand these instructions carefully. Please keep this document open while reviewing, and refer to it as needed.\n\n"
                     "Evaluation Criteria:\n"
                     "1. Legal accuracy (1-5) - The extent to which the answer is consistent with the legal basis. Answers should accurately reflect relevant law and case law. Answers that are uncertain about the legal basis or contain incorrect information should be penalized.\n"
-                    "2. Relevance (1-5) - The degree to which the answer directly addresses the user's question. The answer should be comprehensive and directly respond to the legal question posed. Answers that are off-topic, incomplete, or fail to address the main points of the question should be penalized.\n\n"
+                    "2. Relevance (1-5) - The degree to which the answer directly addresses the user's question. The answer should be comprehensive and directly respond to the legal question posed. Answers that are off-topic, incomplete, or fail to address the main points of the question should be penalized.\n"
+                    "3. Practicality (1-5) - The extent to which the answer provides practical, actionable advice. The answer should be useful and offer clear guidance or next steps. Answers that are vague, overly theoretical, or impractical should be penalized.\n\n"
                     "Evaluation Steps:\n"
                     "1. Read the questions and answers: Carefully read the legal question provided and the system's answer.\n"
                     "2. Compare legal basis: Evaluate how well the answer responds to the question and how accurately it uses relevant laws and case law.\n"
                     "3. Rate legal accuracy: Evaluate how legally accurate the answer is and whether it contains false or unnecessary information.\n"
                     "4. Assess relevance: Determine how well the answer addresses the user's question and whether it provides a comprehensive response.\n"
-                    "5. Assign scores: Score the answer for both legal accuracy and relevance on a scale of 1 to 5. Where 1 is highly inaccurate/irrelevant and 5 is perfectly accurate/relevant.\n"
-                    "6. Provide rationales: Provide a rationale for your calculated scores for both legal accuracy and relevance.\n\n"
+                    "5. Evaluate practicality: Assess how practical and actionable the answer is, considering whether it provides useful guidance or clear next steps.\n"
+                    "6. Assign scores: Score the answer for legal accuracy, relevance, and practicality on a scale of 1 to 5. Where 1 is highly inaccurate/irrelevant/impractical and 5 is perfectly accurate/relevant/practical.\n"
+                    "7. Provide rationales: Provide a rationale for your calculated scores for legal accuracy, relevance, and practicality.\n\n"
                     "Example:\n"
                     "User question:\n"
                     f"{userInput}\n"
                     "System's answer:\n"
                     f"{systemOutput}\n\n"
-                    # "# Evaluation Form (scores, rationales):\n" 
+                    "# Evaluation Form (scores, rationales):\n"
                     "- Legal accuracy: \n"
                     "- Rationale for legal accuracy:\n"
                     "- Relevance: \n"
                     "- Rationale for relevance:\n"
+                    "- Practicality: \n"
+                    "- Rationale for practicality:\n"
         },
 
     ],
     model="gpt-4o",
-    temperature=1
+    temperature=0
 )
 
 print(chat_completion.choices[0].message.content)
